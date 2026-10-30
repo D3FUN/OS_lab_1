@@ -149,7 +149,6 @@ int main(int argc, char *argv[])
     size_t begin = 0;
     for (int i = 0; i < p; i++) {
         size_t length = part + ((size_t)i < extra ? 1 : 0);
-        /* Делим позиции начала, чтобы не терять совпадения на границах. */
         tasks[i] = (Task){text, pattern, m, begin, begin + length, matches, 0};
         begin += length;
     }

@@ -53,7 +53,6 @@ char *read_file(const char *name, size_t *length)
         fclose(file);
         return NULL;
     }
-    /* Для пустого файла тоже нужен ненулевой указатель. */
     char *text = malloc(size > 0 ? (size_t)size : 1);
     if (text == NULL) {
         fclose(file);
@@ -164,7 +163,6 @@ int main(int argc, char *argv[])
         }
         created++;
     }
-    /* Главный поток тоже ищет. При p = 1 это последовательная версия. */
     if (!failed) search(&tasks[p - 1]);
     for (int i = 0; i < created; i++) {
         int error = pthread_join(threads[i], NULL);

@@ -26,7 +26,7 @@ static int load_symbol(void *library, const char *name, void *destination)
         fprintf(stderr, "dlsym %s: %s\n", name, error != NULL ? error : "null address");
         return -1;
     }
-    /* On Linux and macOS dlsym returns the function address in the same representation. */
+
     memcpy(destination, &address, sizeof address);
     return 0;
 }
@@ -53,7 +53,7 @@ static int open_library(int index)
         return -1;
     }
 
-    /* Preserve the old library until both new functions are available. */
+
     void *previous = handle;
     contracts = loaded;
     handle = next;

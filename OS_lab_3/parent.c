@@ -27,7 +27,6 @@ static ssize_t read_input(void *buffer, size_t length) {
             errno = EINTR;
             return -1;
         }
-        /* A timeout bounds the signal-before-wait race even on an idle stdin. */
         struct pollfd input = {STDIN_FILENO, POLLIN, 0};
         int ready = poll(&input, 1, 100);
         if (ready == -1 && errno == EINTR) continue;
@@ -65,8 +64,6 @@ static int read_file_name(char *name) {
     return 0;
 }
 
-/* A bounded sleep also lets us detect a consumer that died without posting.
- * sem_timedwait is not available on macOS; the child uses blocking sem_wait. */
 static int wait_empty(struct channel *channel, pid_t *child) {
     for (;;) {
         if (stop_requested) {
@@ -249,7 +246,6 @@ int main(void) {
 cleanup:
     for (int i = 0; i < 2; ++i) {
         if (children[i] > 0) {
-            /* A stopped or broken consumer must not make error cleanup hang. */
             if (kill(children[i], SIGKILL) == -1 && errno != ESRCH) perror("kill");
             while (waitpid(children[i], NULL, 0) == -1 && errno == EINTR) {}
         }

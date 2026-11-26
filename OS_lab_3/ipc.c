@@ -73,7 +73,6 @@ int channel_open(struct channel *channel, const char *memory_name,
     if (fd == -1) return -1;
     struct stat info;
     int result = fstat(fd, &info);
-    /* Darwin rounds a shared object's size up to a whole memory page. */
     if (result == -1 || info.st_size < (off_t)sizeof(struct shared_block)) {
         int saved_errno = result == -1 ? errno : EINVAL;
         close(fd);

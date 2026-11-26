@@ -7,7 +7,6 @@
 #define BUFFER_SIZE 4096
 #define IPC_NAME_SIZE 32
 
-/* No pointers: mappings in different processes can have different addresses. */
 struct shared_block {
     size_t length;
     int end_of_input;
